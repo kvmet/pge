@@ -28,7 +28,6 @@ int main() {
     try {
         cout << "Hello World..." << endl;
 
-
     } catch(const std::exception& e) {
         // General Catch-All exception for everything ever...
         std::cout << "An exception occurred with message '" << e.what() << "'" << endl;
