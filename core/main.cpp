@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <conio.h>
+#include "assets/input.h"
 
 
 /*TODO:
@@ -20,13 +22,26 @@
  *      exactly the same way.
  * - Use exceptions
  *
+ *
+ * tips on setting up execution path in clion:
+ * application
+ * target is whatever
+ * executable is  powershell.exe
+ * arguments is start powershell .\executableName.exe
+ * working directory is the location of the executable
  */
 
 using namespace std;
 
+
 int main() {
     try {
-        cout << "Hello World..." << endl;
+        string s;
+        cout << "Is anyone there?" << endl;
+        s = getInput("interr");
+
+        cout << "OH HI THERE!" << endl;
+        _getch();
 
     } catch(const std::exception& e) {
         // General Catch-All exception for everything ever...
