@@ -49,12 +49,12 @@ namespace pge {
         return v;
     }
 
-/*
- * gets the input from the user while echoing back as they type
- * if interruptKeyword is defined, the user's input will be stopped
- * immediately once the keyword exists in the input buffer
- *
- */
+    //
+    //  Retrieve a string from the user
+    //  -   Echos back as the user types
+    //  -   Filters allowed characters
+    //  -   Completes immediately once a specified keyword is present in the string
+    //
     string getInput(const string &interruptKeyword = "") {
         string s;
         string allow = ALLOWED_CHARS;
@@ -70,17 +70,18 @@ namespace pge {
                 continue;
             }
 
-            if (string::npos != allow.find(t)) continue; // Jump to end if not a valid entry
+            // Jump to end if not a valid entry
+            if (string::npos == allow.find(t)) continue;
 
             cout << t;
             s += t;
 
-            //todo: should make sure that interrupt is its own word? what if phrase? what if multiple? vector?
             // Handle interrupt
             if(string::npos != s.find(interruptKeyword,0)) {
                 cout << "-";
                 break;
-            }
+            } //todo: should make sure that interrupt is its own word? what if phrase? what if multiple? vector?
+
         } while ( 13 != (int) t ); // Exit on "Enter"
 
         cout << endl;

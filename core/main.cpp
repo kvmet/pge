@@ -8,6 +8,7 @@
 #include <iostream>
 #include <conio.h>
 #include "assets/input.h"
+#include "assets/output.h"
 
 
 /*TODO:
