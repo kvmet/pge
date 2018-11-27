@@ -31,17 +31,24 @@
  * working directory is the location of the executable
  */
 
-using namespace std;
-
+using namespace pge;
 
 int main() {
     try {
-        string s;
+        string s,t;
+        vector<string> e;
         cout << "Is anyone there?" << endl;
         s = getInput("interr");
+        e = explode(s);
 
-        cout << "OH HI THERE!" << endl;
-        _getch();
+        while (!e.empty()) {
+            t = e.front();
+            e.erase(e.begin());
+            cout << t;
+        }
+        cout << "!!";
+
+        cin >> s;
 
     } catch(const std::exception& e) {
         // General Catch-All exception for everything ever...

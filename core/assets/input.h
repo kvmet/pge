@@ -2,51 +2,90 @@
 // Created by kvmet on 11/25/2018.
 //
 
+#define ALLOWED_CHARS " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~$%"
+
 #ifndef PGE_INPUT_H
 #define PGE_INPUT_H
 
 #include <string>
 #include <vector>
 #include <iostream>
+
+// Windows-specific
 #include <conio.h>
-#include <algorithm>
 
-using namespace std;
+namespace pge {
+    using namespace std;
 
-string getInput(string interruptKeyword = "") {
-    string s;
-    char t;
+    //todo: look up doxygen formatting?
 
-    do {
-        t = (char) _getch(); // Get char
+    //
+    //  Retrieve a single char from the user *without echoing it back*
+    //
+    char getChar() { return (char) _getch(); }
 
-        // Sanitize
-        if (13 == (int) t) continue;
+    //
+    //  Split words into vector<string>
+    //
+    vector<string> explode(string s) {
+        vector<string> v;
+        unsigned int p;
 
-        // Handle backspacing...
-        if (8 == (int) t && s.length() > 0) {
-            cout << "\b \b";
-            if (!s.empty()) s.pop_back();
-            continue;
+        while(!s.empty()) {
+            p = s.find(' ');
+
+            if (p != string::npos && p != 0) {
+                v.push_back(s.substr(0, p));
+                s.erase(0, p + 1);
+
+            } else if(p == 0) {
+                s.erase(s.begin());
+
+            } else {
+                v.push_back(s);
+                break;
+            }
         }
+        return v;
+    }
 
-        cout << t; // Repeat back entered chars
-        s += t; // Add new char to buffer
+/*
+ * gets the input from the user while echoing back as they type
+ * if interruptKeyword is defined, the user's input will be stopped
+ * immediately once the keyword exists in the input buffer
+ *
+ */
+    string getInput(const string &interruptKeyword = "") {
+        string s;
+        string allow = ALLOWED_CHARS;
+        char t;
 
-        // Handle interrupt
-        if(string::npos != s.find(interruptKeyword,0)) {
-            cout << "-";
-            break;
-        }
-    } while ( 13 != (int) t ); // Exit on "Enter"
-    cout << endl;
-    return s;
+        do {
+            t = getChar();
 
-    //todo: use vector of keywords for interrupts?
-    //todo: sanitize
-    //todo: also split output into a vector?
-    //todo: if making vector splits then consider making an overload?
+            // Handle backspace
+            if (8 == (int) t && s.length() > 0) {
+                cout << "\b \b";
+                if (!s.empty()) s.pop_back();
+                continue;
+            }
+
+            if (string::npos != allow.find(t)) continue; // Jump to end if not a valid entry
+
+            cout << t;
+            s += t;
+
+            //todo: should make sure that interrupt is its own word? what if phrase? what if multiple? vector?
+            // Handle interrupt
+            if(string::npos != s.find(interruptKeyword,0)) {
+                cout << "-";
+                break;
+            }
+        } while ( 13 != (int) t ); // Exit on "Enter"
+
+        cout << endl;
+        return s;
+    }
 }
-
 
 #endif //PGE_INPUT_H
